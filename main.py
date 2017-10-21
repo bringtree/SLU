@@ -2,7 +2,7 @@ import os
 from sklearn.feature_extraction.text import CountVectorizer
 
 pwd = os.getcwd()
-src_train = pwd + '/data' + '/atis.test.w-intent.iob'
+src_train = pwd + '/data' + '/atis.train.w-intent.iob'
 temp_file = open(src_train, "r", encoding='utf-8')
 train_file = temp_file.read()
 temp_file.close()
