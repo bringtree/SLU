@@ -1,35 +1,32 @@
 import os
 from sklearn.feature_extraction.text import CountVectorizer
+import util
 
 pwd = os.getcwd()
+
+# load atis corpora
 src_train = pwd + '/data' + '/atis.train.w-intent.iob'
-temp_file = open(src_train, "r", encoding='utf-8')
-train_file = temp_file.read()
-temp_file.close()
-
-train_file = train_file.split()
-cleaned_list = []
-a = ''
-
-for x in train_file:
-  if x != 'BOS' and x != 'EOS':
-    a = a + x + ' '
-  else:
-    cleaned_list.append(a)
-    a = ''
-
-cleaned_list.append(a)
-del cleaned_list[0]
-
+train_file = util.load(src_train).split()
 sentence = []
-tags = []
-l = 0
-m = 1
-for i in range(4978):
-  tags.append(cleaned_list[m])
-  sentence.append(cleaned_list[l])
-  l = l + 2
-  m = m + 2
+str = ''
+for word in train_file:
+  if word == 'BOS':
+    str = ''
+  elif word == 'EOS':
+    sentence.append(str)
+  else:
+    str = str + word + ' '
+
+del str
+
+# load stop_word copora
+src_stop_word = pwd + '/stopwords' + '/english'
+stop_word_file = util.load(src_stop_word).split('\n')
+
+for i in range(len(sentence)):
+  str = sentence[i].split()
+  sentence[i] = [word for word in str if(word not in stop_word_file)]
+  sentence[i] = ' '.join(sentence[i])
 
 vectorizer = CountVectorizer()
 vectorizer.fit(sentence)
