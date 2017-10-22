@@ -1,5 +1,6 @@
 import os
 from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
 
 
 def load(src):
@@ -47,7 +48,7 @@ def load_train_data(src_train, src_stop_word='/stopwords/english', workspace=Non
     train_intent[i] = train_intent[i].split()
     train_intent[i] = train_intent[i][-1]
   del train_intent[len(train_intent) - 1]
-  return train_sentence, train_intent
+  return np.array(train_sentence), np.array(train_intent)
 
 
 def load_test_data(src_test, src_stop_word='/stopwords/english', workspace=None):
