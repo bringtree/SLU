@@ -3,11 +3,13 @@ from sklearn.feature_extraction.text import CountVectorizer
 import util
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
+from sklearn import tree
 
 pwd = os.getcwd()
 
 # load atis corpora
 src_train = pwd + '/data' + '/atis.train.w-intent.iob'
+# src_train = pwd + '/data' + '/aaa.iob'
 train_file = util.load(src_train).split()
 train_sentence = []
 str = ''
@@ -33,6 +35,7 @@ for i in range(len(train_sentence) - 1):
 
 # load intent corpora
 src_train = pwd + '/data' + '/atis.train.w-intent.iob'
+# src_train = pwd + '/data' + '/aaa.iob'
 train_intent_file = util.load(src_train).split('\n')
 for i in range(len(train_intent_file) - 1):
   train_intent_file[i] = train_intent_file[i].split()
@@ -40,18 +43,19 @@ for i in range(len(train_intent_file) - 1):
 del train_intent_file[len(train_intent_file) - 1]
 
 # encode train_sentence to word vector
-vectorizer = CountVectorizer()
-vectorizer.fit(train_sentence)
-vector = vectorizer.transform(train_sentence)
+train_input_x_dict= CountVectorizer()
+train_input_x_dict.fit(train_sentence)
+vector = train_input_x_dict.transform(train_sentence)
 train_input_x = vector.toarray()
 # encode train_intent_file tot intent vector
-vectorizer = CountVectorizer()
-vectorizer.fit(train_intent_file)
-vector = vectorizer.transform(train_intent_file)
+train_input_y_dict = CountVectorizer()
+train_input_y_dict.fit(train_intent_file)
+vector = train_input_y_dict.transform(train_intent_file)
 train_output_y = vector.toarray()
 
 # load atis corpora
 src_test = pwd + '/data' + '/atis.test.w-intent.iob'
+# src_test = pwd + '/data' + '/bbb.iob'
 test_file = util.load(src_test).split()
 test_sentence = []
 str = ''
@@ -77,6 +81,7 @@ for i in range(len(test_sentence) - 1):
 
 # load intent corpora
 src_test = pwd + '/data' + '/atis.test.w-intent.iob'
+# src_test = pwd + '/data' + '/bbb.iob'
 test_intent_file = util.load(src_test).split('\n')
 for i in range(len(test_intent_file) - 1):
   test_intent_file[i] = test_intent_file[i].split()
@@ -84,20 +89,17 @@ for i in range(len(test_intent_file) - 1):
 del test_intent_file[len(test_intent_file) - 1]
 
 # encode test_sentence to word vector
-vectorizer = CountVectorizer()
-vectorizer.fit(test_sentence)
-vector = vectorizer.transform(test_sentence)
+
+vector = train_input_x_dict.transform(test_sentence)
 test_x = vector.toarray()
 # encode test_intent_file tot intent vector
-vectorizer = CountVectorizer()
-vectorizer.fit(test_intent_file)
-vector = vectorizer.transform(test_intent_file)
+vector = train_input_y_dict.transform(test_intent_file)
 test_y = vector.toarray()
 
-clf = RandomForestClassifier(criterion='entropy', n_estimators=1000, random_state=1, n_jobs=2)
+clf = RandomForestClassifier(criterion='entropy', n_estimators=1, random_state=1, n_jobs=-1)
 clf = clf.fit(train_input_x, train_output_y)
 scores = cross_val_score(clf,train_input_x,train_output_y)
 print(scores.mean())
 
-scores = cross_val_score(clf,test_x,test_y)
-print(scores.mean())
+# scores = cross_val_score(clf,test_x,test_y)
+# print(scores.mean())
