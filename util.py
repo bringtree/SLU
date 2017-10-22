@@ -88,6 +88,11 @@ def load_test_data(src_test, src_stop_word='/stopwords/english', workspace=None)
     test_intent[i] = test_intent[i].split()
     test_intent[i] = test_intent[i][-1]
   del test_intent[len(test_intent) - 1]
+
+  # str = [v+'\n' for v in test_intent]
+  # file = open(pwd + '/ready.txt', 'w')
+  # file.writelines(str)
+  # file.close()
   return test_sentence, test_intent
 
 
