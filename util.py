@@ -89,6 +89,8 @@ def load_test_data(src_test, src_stop_word='/stopwords/english', workspace=None)
     test_intent[i] = test_intent[i][-1]
   del test_intent[len(test_intent) - 1]
 
+  # generator the ready data file: ready.txt
+
   # str = [v+'\n' for v in test_intent]
   # file = open(pwd + '/ready.txt', 'w')
   # file.writelines(str)
@@ -112,12 +114,32 @@ def train_encoder(train_sentence, train_intent):
   return train_input_x, train_output_y, train_input_x_dict, train_input_y_dict
 
 
-def test_encoder(test_sentence, test_intent, train_input_x_dict, train_input_y_dict):
+def test_encoder(row, dict):
   # encode test_sentence to word vector
-  vector = train_input_x_dict.transform(test_sentence)
+  vector = dict.transform(row)
   test_x = vector.toarray()
 
-  # encode test_intent_file tot intent vector
-  vector2 = train_input_y_dict.transform(test_intent)
-  test_y = vector2.toarray()
-  return test_x, test_y
+  return test_x
+
+
+def load_ready_intent(src, workspace=None):
+  if workspace == None:
+    pwd = os.getcwd()
+  else:
+    pwd = workspace
+
+  test_file = load(pwd + src).split()
+  test_intent = []
+  str = ''
+  for word in test_file:
+    if word == 'BOS':
+      str = ''
+    elif word == 'EOS':
+      test_intent.append(str)
+    else:
+      str = str + word + ' '
+
+  del str
+
+  test_intent = [v.split()[-1] for v in test_file if v != '']
+  return test_intent

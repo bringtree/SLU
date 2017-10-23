@@ -10,3 +10,4 @@ BOS all flights from boston to washington EOS	O O O O B-fromloc.city_name O B-to
 BOS what kind of ground transportation is available in denver EOS	O O O O O O O O O B-city_name atis_ground_service
 BOS show me the flights from dallas to san francisco EOS	O O O O O O B-fromloc.city_name O B-toloc.city_name I-toloc.city_name atis_flight
 BOS show me the flights from san diego to newark by way of houston EOS	O O O O O O B-fromloc.city_name I-fromloc.city_name O B-toloc.city_name O O O B-stoploc.city_name atis_flight
+BOS first flights and fares from pittsburgh to atlanta on a thursday EOS atis_flight
