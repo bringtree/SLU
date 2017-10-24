@@ -20,8 +20,8 @@ train_sentence, train_intent = load_train_data(src_train='/data/atis.train.w-int
 
 max_train = 0
 
-for i in range(20, 1010, 10):
-  for j in range(80, 165, 5):
+for i in range(10, 1010, 10):
+  for j in range(5, 100, 5):
     clf = RandomForestClassifier(criterion='entropy', n_estimators=i, random_state=1, n_jobs=-1,
                                  max_depth=j)
 
@@ -33,19 +33,14 @@ for i in range(20, 1010, 10):
       split_train_sentence, split_test_sentence = train_sentence[train_index], train_sentence[test_index]
       split_train_intent, split_test_intent = train_intent[train_index], train_intent[test_index]
 
-      train_sentence_encoder, train_intent_encoder, train_sentence_dict, train_intent_dict = train_encoder(
-        split_train_sentence,
-        split_train_intent)
+      train_sentence_encoder, train_sentence_dict, = train_encoder(split_train_sentence)
       test_sentence_encoder = test_encoder(split_test_sentence, train_sentence_dict)
 
-      clf.fit(train_sentence_encoder, train_intent_encoder)
+      clf.fit(train_sentence_encoder, split_train_intent)
 
-      test_predict_intent_encoder = clf.predict(test_sentence_encoder)
-
-      test_predict_intent = train_intent_dict.inverse_transform(test_predict_intent_encoder)
+      test_predict_intent = clf.predict(test_sentence_encoder)
 
       train_socre += (split_test_intent == test_predict_intent).mean()
-      print('a')
 
     train_score_mean = train_socre / 5
 

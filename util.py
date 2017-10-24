@@ -4,9 +4,8 @@ import numpy as np
 
 
 def load(src):
-  temp_file = open(src, "r", encoding='utf-8')
-  save_variable = temp_file.read()
-  temp_file.close()
+  with open(src, "r", encoding='utf-8') as file:
+    save_variable = file.read()
   return save_variable
 
 
@@ -98,20 +97,14 @@ def load_test_data(src_test, src_stop_word='/stopwords/english', workspace=None)
   return test_sentence, test_intent
 
 
-def train_encoder(train_sentence, train_intent):
+def train_encoder(train_sentence):
   # encode train_sentence to word vector
   train_input_x_dict = CountVectorizer()
   train_input_x_dict.fit(train_sentence)
   vector = train_input_x_dict.transform(train_sentence)
   train_input_x = vector.toarray()
 
-  # encode train_intent_file tot intent vector
-  train_input_y_dict = CountVectorizer()
-  train_input_y_dict.fit(train_intent)
-  vector2 = train_input_y_dict.transform(train_intent)
-  train_output_y = vector2.toarray()
-
-  return train_input_x, train_output_y, train_input_x_dict, train_input_y_dict
+  return train_input_x, train_input_x_dict
 
 
 def test_encoder(row, dict):

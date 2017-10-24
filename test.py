@@ -17,39 +17,22 @@ test_sentence, test_intent = load_test_data(src_test='/data/atis.test.w-intent.i
 #                                             src_stop_word='/stopwords/english')
 pwd = os.getcwd()
 
-clf = RandomForestClassifier(criterion='entropy', n_estimators=40, random_state=1, n_jobs=-1,
-                             max_depth=80)
+clf = RandomForestClassifier(criterion='entropy', n_estimators=1, random_state=1, n_jobs=-1,
+                             max_depth=90)
 
 train_socre = 0
 
-train_sentence_encoder, train_intent_encoder, train_sentence_dict, train_intent_dict = train_encoder(test_sentence,
-                                                                                                     test_intent)
+train_sentence_encoder, train_sentence_dict = train_encoder(train_sentence)
 
 test_sentence_encoder = test_encoder(test_sentence, train_sentence_dict)
 
-clf.fit(train_sentence_encoder, train_intent_encoder)
+clf.fit(train_sentence_encoder, train_intent)
 
-test_predict_intent_encoder = clf.predict(test_sentence_encoder)
+test_predict_intent = clf.predict(test_sentence_encoder)
 
-test_predict_intent = train_intent_dict.inverse_transform(test_predict_intent_encoder)
-
-str = []
-for v in test_predict_intent:
-  if v.size == 0:
-    str.append('\n')
-  else:
-    str.append(v[0]+'\n')
-
-file = open(pwd + '/false.txt', 'w')
-file.writelines(str)
-file.close()
-
-# train_socre += ((test_intent == test_predict_intent).mean())
+with open(pwd + '/false.txt', 'w')  as file:
+  str = [v + '\n' for v in test_predict_intent]
+  file.writelines(str)
 
 true_intent = load_ready_intent('/ready.txt')
-k = 0
-for i in range(0, len(true_intent)):
-  if test_predict_intent[i].size != 0:
-    if true_intent[i] == test_predict_intent[i][0]:
-      k = k + 1
-print(float(k) / len(true_intent))
+print((test_intent == test_predict_intent).mean())
