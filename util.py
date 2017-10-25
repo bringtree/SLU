@@ -97,17 +97,13 @@ def load_test_data(src_test, src_stop_word='/stopwords/english', workspace=None)
   return test_sentence, test_intent
 
 
-def train_encoder(train_sentence):
-  # encode train_sentence to word vector
-  train_input_x_dict = CountVectorizer()
-  train_input_x_dict.fit(train_sentence)
-  vector = train_input_x_dict.transform(train_sentence)
-  train_input_x = vector.toarray()
-
-  return train_input_x, train_input_x_dict
+def generator_dict(word):
+  dict = CountVectorizer()
+  dict.fit(word)
+  return dict
 
 
-def test_encoder(row, dict):
+def encoder(row, dict):
   # encode test_sentence to word vector
   vector = dict.transform(row)
   test_x = vector.toarray()

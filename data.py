@@ -26,10 +26,10 @@ train_sentence_encoder = encoder(train_sentence, dict)
 # param_test1 = {'n_estimators': params_type}
 
 # max_depth = 100
-params_type = np.arange(1, 3, 1)
-param_test1 = {'criterion': ['gini','entropy']}
+params_type = np.arange(0, 0.5, 0.05)
+param_test1 = {'min_weight_fraction_leaf': params_type}
 
-RFC = RandomForestClassifier(criterion='gini', random_state=1, n_jobs=1, n_estimators=30,
+RFC = RandomForestClassifier(criterion='gini', random_state=1, n_jobs=8, n_estimators=30,
                              max_depth=100, min_samples_split=2, min_samples_leaf=1, max_leaf_nodes=600,
                              min_weight_fraction_leaf=0)
 
