@@ -25,3 +25,7 @@
     └── n_estimators.png
 
 ```
+
+####
+早期遇到一个坑，自己把意图用one-hot 编码进行预处理后再作输出值，用决策树的时候会出现异常(结果不准确)。
+详见[https://github.com/scikit-learn/scikit-learn/issues/9988]
