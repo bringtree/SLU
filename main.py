@@ -40,15 +40,10 @@ fig = plt.figure(1, figsize=(16, 12))
 plt.clf()
 ax1 = fig.add_subplot(1, 2, 1)
 ax2 = fig.add_subplot(1, 2, 2)
-scores = GSCV.grid_scores_
+scores = GSCV.cv_results_
+accuracy = scores['mean_test_score']
+std = scores['std_test_score']
 
-accuracy = []
-std = []
-
-for i in range(len(scores)):
-  accuracy.append(scores[i][1])
-  # 标准差
-  std.append(np.std(scores[i][2]))
 ax1.plot(params_type, accuracy, linewidth=2)
 ax2.plot(params_type, std, linewidth=2)
 plt.axis('tight')
