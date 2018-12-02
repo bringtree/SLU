@@ -18,8 +18,8 @@ train_sentence, train_intent = load_train_data(src_train='/data/atis.train.w-int
 #                                             src_stop_word='/stopwords/english')
 
 
-dict = generator_dict(train_sentence)
-train_sentence_encoder = encoder(train_sentence, dict)
+w2v_dict = generator_dict(train_sentence)
+train_sentence_encoder = encoder(train_sentence, w2v_dict)
 
 # n_estimators = 30
 # params_type = np.arange(10, 300, 10)
