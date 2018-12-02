@@ -23,11 +23,11 @@ clf = RandomForestClassifier(criterion='gini', random_state=1, n_jobs=-1, n_esti
 
 train_socre = 0
 
-dict = generator_dict(train_sentence)
+w2v_dict = generator_dict(train_sentence)
 
-train_sentence_encoder = encoder(train_sentence,dict)
+train_sentence_encoder = encoder(train_sentence,w2v_dict)
 
-test_sentence_encoder = encoder(test_sentence, dict)
+test_sentence_encoder = encoder(test_sentence, w2v_dict)
 
 clf.fit(train_sentence_encoder, train_intent)
 
